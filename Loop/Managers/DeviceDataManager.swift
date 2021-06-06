@@ -14,6 +14,7 @@ import LoopCore
 import LoopTestingKit
 import UserNotifications
 import Combine
+import sugar_utils
 
 final class DeviceDataManager {
 
@@ -329,6 +330,7 @@ final class DeviceDataManager {
 
         setupPump()
         setupCGM()
+        updateDefaultOverrides()
                 
         cgmStalenessMonitor.$cgmDataIsStale
             .combineLatest($cgmHasValidSensorSession)
@@ -362,6 +364,70 @@ final class DeviceDataManager {
             }
         }
     }
+    
+    
+    //================================
+    //Start Sugar Utils
+    
+    func updateDefaultOverrides(){
+        let defaultSUPresets = SUOverridePreset.createDefaultPresets()
+        let loopPresets = loopManager.settings.overridePresets
+        
+        if compareSUPresets(defaultSUPresets, loopPresets: loopPresets) == false {
+            loopManager.settings.overridePresets = defaultSUPresets.map({ (suPreset) -> TemporaryScheduleOverridePreset in
+                createLoopPresetFromSUPreset(suPreset)
+            })
+        }
+    }
+    
+    func compareSUPresets(_ suPresets: [SUOverridePreset], loopPresets: [TemporaryScheduleOverridePreset]) -> Bool {
+        if suPresets.count != loopPresets.count {
+            return false
+        }
+        
+        for (index, persistedPreset) in loopPresets.enumerated() {
+            let suEquivalentPreset = suPresets[index]
+            if suEquivalentPreset != createSUPresetFromLoopPreset(persistedPreset) {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    func createLoopPresetFromSUPreset(_ suPreset: SUOverridePreset) -> TemporaryScheduleOverridePreset {
+        let targetRange = DoubleRange(minValue: Double(suPreset.targetRange.minValue), maxValue: Double(suPreset.targetRange.maxValue))
+        let settings = TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter, targetRange: targetRange, insulinNeedsScaleFactor: suPreset.insulinNeedsScaleFactor())
+        let preset = TemporaryScheduleOverridePreset(symbol: suPreset.symbol, name: suPreset.name, settings: settings, duration: TemporaryScheduleOverride.Duration.indefinite)
+        return preset
+    }
+    
+    func createSUPresetFromLoopPreset(_ persistedPreset: TemporaryScheduleOverridePreset) -> SUOverridePreset? {
+        
+        let name = persistedPreset.name
+        let symbol = persistedPreset.symbol
+        guard let minTarget = persistedPreset.settings.targetRange?.lowerBound.doubleValue(for: .milligramsPerDeciliter) else {
+            return nil
+        }
+        
+        guard let maxTarget = persistedPreset.settings.targetRange?.upperBound.doubleValue(for: .milligramsPerDeciliter) else {
+            return nil
+        }
+        
+        guard let scaleFactor = persistedPreset.settings.insulinNeedsScaleFactor else {
+            return nil
+        }
+        
+        let insulinPercent = Int(round(scaleFactor * 100.0))
+
+        return SUOverridePreset(name: name, symbol: symbol, targetRange: (minTarget: Int(minTarget), maxTarget: Int(maxTarget)), insulinNeedsPercent: insulinPercent)
+
+    }
+
+    //End Sugar Utils
+    //================================
+
+
     
     var isCGMManagerValidPumpManager: Bool {
         guard let rawValue = UserDefaults.appGroup?.cgmManagerState else {
