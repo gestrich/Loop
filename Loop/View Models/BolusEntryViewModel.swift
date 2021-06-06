@@ -288,15 +288,7 @@ final class BolusEntryViewModel: ObservableObject {
 
         // Authenticate the bolus before saving anything
         if enteredBolus.doubleValue(for: .internationalUnit()) > 0 {
-            let message = String(format: NSLocalizedString("Authenticate to Bolus %@ Units", comment: "The message displayed during a device authentication prompt for bolus specification"), enteredBolusAmountString)
-            authenticate(message) { [weak self] in
-                switch $0 {
-                case .success:
-                    self?.continueSaving(onSuccess: completion)
-                case .failure:
-                    break
-                }
-            }
+            continueSaving(onSuccess: completion)
         } else if potentialCarbEntry != nil  { // Allow user to save carbs without bolusing
             continueSaving(onSuccess: completion)
         } else if manualGlucoseSample != nil { // Allow user to save the manual glucose sample without bolusing
