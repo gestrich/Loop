@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "sugar_utils",
+        "repositoryURL": "https://github.com/gestrich/sugar_utils.git",
+        "state": {
+          "branch": "master",
+          "revision": "6a5c44a42b8614e08a6867d9fcf49095fcaf2b60",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
