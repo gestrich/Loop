@@ -399,6 +399,7 @@
 		A9A63F8D246B261100588D5B /* DosingDecisionStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A63F8C246B261100588D5B /* DosingDecisionStoreTests.swift */; };
 		A9A63F8E246B271600588D5B /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439897341CD2F7DE00223065 /* NSTimeInterval.swift */; };
 		A9B607B0247F000F00792BE4 /* UserNotifications+Loop.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B607AF247F000F00792BE4 /* UserNotifications+Loop.swift */; };
+		A9BCFA5B267F9671009394BE /* sugar_utils in Frameworks */ = {isa = PBXBuildFile; productRef = A9BCFA5A267F9671009394BE /* sugar_utils */; };
 		A9C1719725366F780053BCBD /* WatchHistoricalGlucoseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C1719625366F780053BCBD /* WatchHistoricalGlucoseTest.swift */; };
 		A9C62D8223316FF600535612 /* UserDefaults+Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C62D8123316FF500535612 /* UserDefaults+Services.swift */; };
 		A9C62D842331700E00535612 /* DiagnosticLog+Subsystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C62D832331700D00535612 /* DiagnosticLog+Subsystem.swift */; };
@@ -1497,6 +1498,7 @@
 				C1750AEC255B013300B8011C /* Minizip.framework in Frameworks */,
 				43D9FFD621EAE05D00AF44BF /* LoopCore.framework in Frameworks */,
 				43F78D4F1C914197002152D1 /* LoopKit.framework in Frameworks */,
+				A9BCFA5B267F9671009394BE /* sugar_utils in Frameworks */,
 				892A5D5B222F0D7C008961AB /* LoopTestingKit.framework in Frameworks */,
 				4F7528941DFE1E9500C322D6 /* LoopUI.framework in Frameworks */,
 				C1E2774822433D7A00354103 /* MKRingProgressView.framework in Frameworks */,
@@ -2694,6 +2696,9 @@
 				E9B07F93253BBA6500BAD8F8 /* PBXTargetDependency */,
 			);
 			name = Loop;
+			packageProductDependencies = (
+				A9BCFA5A267F9671009394BE /* sugar_utils */,
+			);
 			productName = Loop;
 			productReference = 43776F8C1B8022E90074EA36 /* Loop.app */;
 			productType = "com.apple.product-type.application";
@@ -3037,6 +3042,9 @@
 				ro,
 			);
 			mainGroup = 43776F831B8022E90074EA36;
+			packageReferences = (
+				A9BCFA59267F9671009394BE /* XCRemoteSwiftPackageReference "sugar_utils" */,
+			);
 			productRefGroup = 43776F8D1B8022E90074EA36 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -4572,7 +4580,8 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -5120,6 +5129,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A9BCFA59267F9671009394BE /* XCRemoteSwiftPackageReference "sugar_utils" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gestrich/sugar_utils.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A9BCFA5A267F9671009394BE /* sugar_utils */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A9BCFA59267F9671009394BE /* XCRemoteSwiftPackageReference "sugar_utils" */;
+			productName = sugar_utils;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		1D080CBB2473214A00356610 /* AlertStore.xcdatamodeld */ = {
